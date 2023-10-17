@@ -1,0 +1,53 @@
+<c-row ngPreserveWhitespaces>
+    <c-col xs="12">
+        <c-card class="mb-4">
+            <c-card-header>
+                <strong>Produtos</strong>
+            </c-card-header>
+            <c-card-body>
+
+
+                <table [small]="true" cTable>
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Class</th>
+                            <th scope="col">Heading</th>
+                            <th scope="col">Heading</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th scope="row">1</th>
+                            <td>Mark</td>
+                            <td>Otto</td>
+                            <td>@mdo</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </c-card-body>
+        </c-card>
+    </c-col>
+
+
+    <c-card-body>
+        <c-pagination align="end" aria-label="Page navigation example">
+            <c-page-item [disabled]="true">
+                <a cPageLink routerLink="./">Previous</a>
+            </c-page-item>
+            <c-page-item>
+                <a cPageLink routerLink="./">1</a>
+            </c-page-item>
+            <c-page-item>
+                <a cPageLink routerLink="./">2</a>
+            </c-page-item>
+            <c-page-item>
+                <a cPageLink routerLink="./">3</a>
+            </c-page-item>
+            <c-page-item>
+                <a cPageLink routerLink="./">Next</a>
+            </c-page-item>
+        </c-pagination>
+    </c-card-body>
+</c-row>
