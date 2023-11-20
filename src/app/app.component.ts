@@ -1,32 +1,63 @@
-import { Component, OnInit } from '@angular/core';
-import { Router, NavigationEnd } from '@angular/router';
+import {Component, OnInit} from '@angular/core'
+import {Router, ActivatedRoute, NavigationStart, NavigationEnd, NavigationCancel} from "@angular/router"
+import {environment} from "../environments/environment"
+import {SettingsService} from "@youpez/services/settings.service"
 
-import { IconSetService } from '@coreui/icons-angular';
-import { iconSubset } from './icons/icon-subset';
-import { Title } from '@angular/platform-browser';
+const getSessionStorage = (key) => {
+  return sessionStorage.getItem(key)
+}
 
 @Component({
   selector: 'app-root',
-  template: '<router-outlet></router-outlet>',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-  title = 'CoreUI Free Angular Admin Template';
+  private appLoaded: boolean = false
 
-  constructor(
-    private router: Router,
-    private titleService: Title,
-    private iconSetService: IconSetService
-  ) {
-    titleService.setTitle(this.title);
-    // iconSet singleton
-    iconSetService.icons = { ...iconSubset };
+  constructor(private settingsService: SettingsService,
+              private router: Router,
+              private route: ActivatedRoute,) {
+
   }
 
   ngOnInit(): void {
-    this.router.events.subscribe((evt) => {
-      if (!(evt instanceof NavigationEnd)) {
-        return;
+    this.route.queryParams
+      .subscribe((queryParams) => {
+        if (queryParams.theme) {
+          this.settingsService.setTheme(queryParams.theme)
+        }
+        else {
+          this.settingsService.setTheme(getSessionStorage('--app-theme'))
+        }
+
+        if (queryParams.sidebar) {
+          this.settingsService.setSideBar(queryParams.sidebar)
+        }
+        else {
+          this.settingsService.setSideBar(getSessionStorage('--app-theme-sidebar'))
+        }
+
+        if (queryParams.header) {
+          this.settingsService.setHeader(queryParams.header)
+        }
+        else {
+          this.settingsService.setHeader(getSessionStorage('--app-theme-header'))
+        }
+      })
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationStart) {
+
       }
-    });
+      if (event instanceof NavigationEnd) {
+        if (!this.appLoaded) {
+          (<any>window).appBootstrap()
+          this.appLoaded = true
+        }
+      }
+      if (event instanceof NavigationCancel) {
+
+      }
+    })
   }
 }

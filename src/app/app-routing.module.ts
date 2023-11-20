@@ -1,42 +1,27 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-
-import { DefaultLayoutComponent } from './containers';
+import {NgModule} from '@angular/core'
+import {Routes, RouterModule} from '@angular/router'
 
 const routes: Routes = [
   {
-    path: '',
-    redirectTo: 'dashboard',
-    pathMatch: 'full'
+    path: 'app',
+    data:{
+      breadcrumb: 'Home'
+    },
+    loadChildren: () => import('./main/main.module').then(m => m.MainModule)
   },
   {
-    path: '',
-    component: DefaultLayoutComponent,
-    data: {
-      title: 'Home'
-    },
-    children: [
-      {
-        path: 'main',
-        loadChildren: () =>
-          import('./pages/product/product.module').then((m) => m.ProductModule)
-      },
-      
-    ]
+    path: 'auth',
+    loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule)
   },
-  
-  {path: '**', redirectTo: 'dashboard'}
-];
+  {
+    path: '**',
+    redirectTo: 'auth/modern/signin',
+    pathMatch: 'full',
+  },
+]
 
 @NgModule({
-  imports: [
-    RouterModule.forRoot(routes, {
-      scrollPositionRestoration: 'top',
-      anchorScrolling: 'enabled',
-      initialNavigation: 'enabledBlocking'
-      // relativeLinkResolution: 'legacy'
-    })
-  ],
+  imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
 export class AppRoutingModule {

@@ -1,82 +1,48 @@
-import { NgModule } from '@angular/core';
-import { HashLocationStrategy, LocationStrategy, PathLocationStrategy } from '@angular/common';
-import { BrowserModule, Title } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ReactiveFormsModule } from '@angular/forms';
-import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http'
-import { NgScrollbarModule } from 'ngx-scrollbar';
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { DefaultFooterComponent, DefaultHeaderComponent, DefaultLayoutComponent } from './containers';
-import {
-  AvatarModule,
-  BadgeModule,
-  BreadcrumbModule,
-  ButtonGroupModule,
-  ButtonModule,
-  CardModule,
-  DropdownModule,
-  FooterModule,
-  FormModule,
-  GridModule,
-  HeaderModule,
-  ListGroupModule,
-  NavModule,
-  ProgressModule,
-  SharedModule,
-  SidebarModule,
-  TabsModule,
-  UtilitiesModule
-} from '@coreui/angular';
-import { IconModule, IconSetService } from '@coreui/icons-angular';
-import { AuthInterceptor } from './auth.interceptor';
+import {BrowserModule} from '@angular/platform-browser'
+import {NgModule} from '@angular/core'
+import {FlexLayoutModule} from '@angular/flex-layout'
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations'
+import {NgxMdModule} from "ngx-md"
 
-const APP_CONTAINERS = [
-  DefaultFooterComponent,
-  DefaultHeaderComponent,
-  DefaultLayoutComponent
-];
+import {CoreModule} from "./core/core.module"
+import {SharedModule} from './shared/shared.module'
+
+import {
+  HttpClientModule,
+  HttpEvent,
+  HttpInterceptor,
+  HttpHandler,
+  HttpRequest,
+  HTTP_INTERCEPTORS,
+} from '@angular/common/http'
+
+import {AppRoutingModule} from './app-routing.module'
+import {AppComponent} from './app.component'
+import {StoreModule} from '@ngrx/store'
+import {reducers, metaReducers} from './store/app.reducers'
+import {StoreDevtoolsModule} from '@ngrx/store-devtools'
+import {environment} from '../environments/environment'
+import {EffectsModule} from '@ngrx/effects'
+import {AppEffects} from './store/app.effects'
 
 @NgModule({
-  declarations: [AppComponent, ...APP_CONTAINERS],
+  declarations: [
+    AppComponent
+  ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
-    AvatarModule,
-    BreadcrumbModule,
-    FooterModule,
-    DropdownModule,
-    GridModule,
-    HeaderModule,
-    SidebarModule,
-    IconModule,
-    NavModule,
-    ButtonModule,
-    FormModule,
-    UtilitiesModule,
-    ButtonGroupModule,
-    ReactiveFormsModule,
-    SidebarModule,
+    FlexLayoutModule,
+    CoreModule,
+    HttpClientModule,
     SharedModule,
-    TabsModule,
-    ListGroupModule,
-    ProgressModule,
-    BadgeModule,
-    ListGroupModule,
-    CardModule,
-    NgScrollbarModule,
-    HttpClientModule
+    StoreModule.forRoot(reducers, {metaReducers}),
+    !environment.production ? StoreDevtoolsModule.instrument() : [],
+    EffectsModule.forRoot([AppEffects]),
+    NgxMdModule.forRoot(),
   ],
-  providers: [
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: AuthInterceptor,
-      multi: true,
-    },
-    IconSetService,
-    Title
-  ],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule {
